@@ -30,7 +30,7 @@ def define_qubo_problem(adj_matrix, n, K):
             Q[i][j] = (1 / (2 * m)) * (s - (k_i * k_j) / (2 * m)) * kronecker_delta(i, j)
 
     # Define the modularity function M
-    M = (-1) * np.matmul(X.T, Q, X)
+    M = (-1) * np.matmul(np.matmul(X.T, Q), X)
 
     # Set the objective
     model.set_objective(np.trace(M))
@@ -85,10 +85,4 @@ def adj2part(adj_matrix, n, K):
     partitioning, modularity = extract_partitioning(decoded_solution, n, K, Q)
     return partitioning, modularity
 
-if __name__ == "__main__":
-    n, K = 10, 3
-    adj_matrix = generate_graph(n)
 
-    print("Adjacency Matrix:")
-    pprint(adj_matrix)
-    adj2part(adj_matrix)
