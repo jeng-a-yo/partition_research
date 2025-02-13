@@ -1,0 +1,5 @@
+__pycache__/
+adjacency_matrices/
+images/
+check_answer.py
+test.py
