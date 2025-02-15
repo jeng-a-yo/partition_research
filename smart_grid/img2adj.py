@@ -92,32 +92,13 @@ def build_adj_matrix(center_points, image):
                 adj_matrix[i, j] = adj_matrix[j, i] = 1
     return adj_matrix
 
-def compute_wiener_number(adj_matrix):
-    """Computes the Wiener number, a graph-theoretic distance measure."""
-    num_points = len(adj_matrix)
-    step_matrix = np.full((num_points, num_points), np.inf)
-    np.fill_diagonal(step_matrix, 0)
-    for i in range(num_points):
-        queue = {i: 0}
-        step = 1
-        while len(queue) < num_points:
-            new_entries = {}
-            for j in queue.keys():
-                for k in range(num_points):
-                    if k not in queue and adj_matrix[j, k] == 1:
-                        new_entries[k] = step
-            queue.update(new_entries)
-            step += 1
-        step_matrix[i] = [queue.get(k, np.inf) for k in range(num_points)]
-    return int(np.sum(step_matrix[step_matrix != np.inf]) // 2)
-
 def img2adj(image_path, index=0):
     """Main function that processes the image, finds regions, builds the adjacency matrix, and computes the Wiener number."""
     processed_image = process_image(image_path)
     blue_regions = find_blue_regions(processed_image)
     center_points = list(map(find_center, blue_regions))
     adj_matrix = build_adj_matrix(center_points, processed_image)
-    return adj_matrix
+    return center_points, adj_matrix
 
 
 if __name__ == "__main__":
